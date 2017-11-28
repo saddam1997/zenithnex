@@ -17,7 +17,7 @@ if(isset($_GET['s']))
 	$message = $_GET['s'];
 }
 
-	include 'header2.php';
+	include 'fundheader.php';
 	 ob_end_flush();
 ?>
 	

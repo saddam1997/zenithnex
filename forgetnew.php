@@ -1,7 +1,8 @@
 <?php
 error_reporting(0);
-session_start();
 
+session_start();
+include_once('common.php');
 
 if(isset($_POST['btnforget']))
 {
@@ -34,12 +35,17 @@ if($response === FALSE){
 
 $responseData = json_decode($response, TRUE);
 
-$message = $responseData['message'];
+
 
 if(isset($responseData['userMailId']))
 {
+  $message = $responseData['message'];
 
-  header("location:loginnew.php?f=".$message);
+  header("location:verfiyforgetotp.php?f=".$message);
+}
+else
+{
+  $error = $responseData['message'];
 }
 
 }
@@ -179,18 +185,18 @@ if(isset($responseData['userMailId']))
   <p>
       <img ng-src="https://d32exi8v9av3ux.cloudfront.net/web/71d1732/website/pages/login/email.svg" width="58" height="60" src="assets/email.svg">
   </p>
-<p style="color:Green;"> <?php if(isset($success)) {echo $success. " Successfully Signup You Can SignIn Now."; }?> </p>
-<p style="color:red;"> <?php if(isset($message)) {echo $message; }?> </p>
+
+<p style="color:red;"> <?php if(isset($error)) {echo $error; }?> </p>
   <form  method="post" class="">
 
     <div class="form-group">
       <input class="form-control"  type="email" name="email" placeholder="Email address" autofocus="" required="">
     </div>
-	
-	<!-- <div class="ln-captcha">
+  
+  <!-- <div class="ln-captcha">
       <div class="g-recaptcha ng-pristine ng-untouched ng-valid ng-isolate-scope ng-empty" vc-recaptcha="" ng-model="vm.recaptcha" key="vm.recaptchaPublicKey"><div style="width: 304px; height: 78px;"><div><iframe src="./Sign up _ Luno_files/anchor.html" title="recaptcha widget" width="304" height="78" frameborder="0" scrolling="no" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox"></iframe></div><textarea id="g-recaptcha-response" name="g-recaptcha-response" class="g-recaptcha-response" style="width: 250px; height: 40px; border: 1px solid #c1c1c1; margin: 10px 25px; padding: 0px; resize: none;  display: none; "></textarea></div></div>
     </div> -->
-    <button type="submit" name="btnforget" class="btn ln-btn-sm btn-primary">Sign In</button>
+    <button type="submit" name="btnforget" class="btn ln-btn-sm btn-primary">Send</button>
 
     <div class="ln-account-secondary-actions">
       <a href="signupnew.php">Sign up</a>

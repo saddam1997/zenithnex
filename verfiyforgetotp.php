@@ -2,91 +2,9 @@
 error_reporting(1);
 session_start();
 
-
+include_once('common.php');
 $success = $_GET['m'];
 $forget = $_GET['f'];
-
-
-if(isset($_POST['btnlogin']))
-{
-//  var_dump($_POST);
-  $email_id = $_POST['email'];
-  $password = $_POST['emailpassword'];
-  
-
-$postData = array(
-   "email" => $email_id,
-        "password" => $password
-  );
-
-// Create the context for the request
-$context = stream_context_create(array(
-  'http' => array(
-    'method' => 'POST',
-    'header' => "Content-Type: application/json\r\n",
-    'content' => json_encode($postData)
-    )
-  ));
-
-include_once('common.php');
-$response = file_get_contents($url_api.'/auth/authentcate', TRUE, $context);
-
-
-if($response === FALSE){
-  die('Error');
-}
-
-
-$responseData = json_decode($response, TRUE);
-if($responseData['statusCode'] != 401){ 
-  $message = $responseData['message'];
-  $_SESSION["user_id"] = $responseData['user']['id'];
-  $_SESSION["user_session"] = $responseData['user']['email'];
-  $_SESSION['is_email_verify'] = $responseData['user']['verifyEmail'];
-  $_SESSION['user_admin'] = $responseData['user']['isAdmin'];
-  $_SESSION['BCHAddress'] = $responseData['user']['userBCHAddress'];
-  $_SESSION['BTCAddress'] = $responseData['user']['userBTCAddress'];
-  $_SESSION['GDSAddress'] = $responseData['user']['userGDSAddress'];
-  $_SESSION['EBTAddress'] = $responseData['user']['userEBTAddress'];
-  $_SESSION['BTCbalance'] = $responseData['user']['BTCMainbalance'];
-  $_SESSION['BCHbalance'] = $responseData['user']['BCHMainbalance'];
-  $_SESSION['GDSbalance'] = $responseData['user']['GDSMainbalance'];
-  $_SESSION['EBTbalance'] = $responseData['user']['EBTMainbalance'];
-  $_SESSION['BTCtradebalance'] = $responseData['user']['BTCbalance'];
-  $_SESSION['BCHtradebalance'] = $responseData['user']['BCHbalance'];
-  $_SESSION['GDStradebalance'] = $responseData['user']['GDSbalance'];
-  $_SESSION['EBTtradebalance'] = $responseData['user']['EBTbalance'];
-  $_SESSION['BTCfreezebalance'] = $responseData['user']['FreezedBTCbalance'];
-  $_SESSION['BCHfreezebalance'] = $responseData['user']['FreezedBCHbalance'];
-  $_SESSION['GDSfreezebalance'] = $responseData['user']['FreezedGDSbalance'];
-  $_SESSION['EBTfreezebalance'] = $responseData['user']['FreezedEBTbalance'];
-  $_SESSION['tfa'] = $responseData['user']['tfastatus'];
-  $_SESSION['key'] = $responseData['user']['googlesecreatekey'];
-}
-else
-{
-  unset($success);
-  
-  $message = $responseData['message'];
-}
-
-
-if($responseData['statusCode'] != 401 && $responseData['user']['tfastatus']==true) 
-{
-  
-  header("location:device_confirmations.php");
-
-}
-else if(isset($responseData['user']))
-
-{
-  header("location:index.php");
-}
-
-}
-
-
-
 
 ///login With forget passworr////
 if(isset($_POST['btnlogin']))
@@ -267,12 +185,11 @@ else
       
 
 <div class="section">
-  <h1 class="ng-binding">Login</h1> 
+  <h1 class="ng-binding">Welcome back</h1> 
 
   <p>
       <img ng-src="https://d32exi8v9av3ux.cloudfront.net/web/71d1732/website/pages/login/email.svg" width="58" height="60" src="assets/email.svg">
   </p>
-<p style="color:Green;"> <?php if(isset($success)) {echo $success; }?> </p>
 <p style="color:Green;"> <?php if(isset($forget)) {echo $forget. " You Can SignIn Now."; }?> </p>
 <p style="color:red;"> <?php if(isset($message)) {echo $message; }?> </p>
   <form  method="post" class="">
@@ -281,19 +198,14 @@ else
       <input class="form-control"  type="email" name="email" placeholder="Email address" autofocus="" required="">
     </div>
   <div class="form-group">
-      <input class="form-control"  type="password" name="emailpassword" placeholder="Password" autofocus="" required="">
+      <input class="form-control"  type="password" name="emailpassword" placeholder="OPT" autofocus="" required="">
     </div>
   <!-- <div class="ln-captcha">
       <div class="g-recaptcha ng-pristine ng-untouched ng-valid ng-isolate-scope ng-empty" vc-recaptcha="" ng-model="vm.recaptcha" key="vm.recaptchaPublicKey"><div style="width: 304px; height: 78px;"><div><iframe src="./Sign up _ Luno_files/anchor.html" title="recaptcha widget" width="304" height="78" frameborder="0" scrolling="no" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox"></iframe></div><textarea id="g-recaptcha-response" name="g-recaptcha-response" class="g-recaptcha-response" style="width: 250px; height: 40px; border: 1px solid #c1c1c1; margin: 10px 25px; padding: 0px; resize: none;  display: none; "></textarea></div></div>
     </div> -->
-    <button type="submit" name="btnlogin" class="btn ln-btn-sm btn-primary">Sign In</button>
+    <button type="submit" name="btnlogin" class="btn ln-btn-sm btn-primary">Verify OTP</button>
 
-    <div class="ln-account-secondary-actions">
-      <a href="signupnew.php">Sign up</a>
-    </div>
-    <div class="ln-account-secondary-actions">
-      <a href="forgetnew.php">Forget Password</a>
-    </div>
+    
 
   </form>
 </div>
